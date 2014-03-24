@@ -38,9 +38,9 @@ function vendor() {
 }
 
 # Vendor directories
-VENDORED_GDAL="vendor/gdal/$GDAL_VERSION"
-VENDORED_PROJ="vendor/proj/$PROJ_VERSION"
-VENDORED_GEOS="vendor/geos/$GEOS_VERSION"
+VENDORED_GDAL="vendor/gdal"
+VENDORED_PROJ="vendor/proj"
+VENDORED_GEOS="vendor/geos"
 
 echo "-----> Vendoring binaries"
 vendor "http://static.t4spatial.com.s3.amazonaws.com/heroku/gdal-1.10.1-1.tar.gz"    "$BUILD_DIR/$VENDORED_GDAL"
