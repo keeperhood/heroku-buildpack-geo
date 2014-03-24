@@ -37,9 +37,15 @@ function vendor() {
   true
 }
 
+# Vendor directories
+VENDORED_GDAL="vendor/gdal/$GDAL_VERSION"
+VENDORED_PROJ="vendor/proj/$PROJ_VERSION"
+VENDORED_GEOS="vendor/geos/$GEOS_VERSION"
+
 echo "-----> Vendoring binaries"
-vendor "https://s3.amazonaws.com/mojodna-heroku/gdal-1.10.1-1.tar.gz"    "$BUILD_DIR/vendor/gdal"
-vendor "https://s3.amazonaws.com/mojodna-heroku/proj-4.8.0-1.tar.gz"     "$BUILD_DIR/vendor/proj"
+vendor "http://static.t4spatial.com.s3.amazonaws.com/heroku/gdal-1.10.1-1.tar.gz"    "$BUILD_DIR/$VENDORED_GDAL"
+vendor "http://static.t4spatial.com.s3.amazonaws.com/heroku/proj-4.8.0-1.tar.gz"     "$BUILD_DIR/$VENDORED_PROJ"
+vendor "http://static.t4spatial.com.s3.amazonaws.com/heroku/geos-3.4.1.tar.gz"       "$BUILD_DIR/$VENDORED_GEOS"
 
 echo "-----> Configuring build environment"
 
@@ -56,7 +62,7 @@ EOF
 echo "-----> Building runtime environment"
 mkdir -p $BUILD_DIR/.profile.d
 
-cat <<EOF > $BUILD_DIR/.profile.d/gdal.sh
+cat <<EOF > $BUILD_DIR/.profile.d/geo.sh
 export PATH="${PATH//$BUILD_DIR//app}:\$PATH"
 export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:${LD_LIBRARY_PATH//$BUILD_DIR//app}"
 export LIBRARY_PATH="\$LIBRARY_PATH:${LIBRARY_PATH//$BUILD_DIR//app}"
@@ -64,3 +70,19 @@ export PKG_CONFIG_PATH="\$PKG_CONFIG_PATH:${PKG_CONFIG_PATH//$BUILD_DIR//app}"
 export CPPPATH="\$CPPPATH:${CPPPATH//$BUILD_DIR//app}"
 export CPATH="\$CPATH:${CPATH//$BUILD_DIR//app}"
 EOF
+
+# Bundle workaround
+mkdir -p $BUILD_DIR/.bundle
+if [ -f $CACHE_DIR/.bundle/config ]; then
+  rm $CACHE_DIR/.bundle/config
+fi
+echo "---
+BUNDLE_BUILD__RGEO: --with-geos-dir=$BUILD_DIR/$VENDORED_GEOS --with-geos-lib=$BUILD_DIR/$VENDORED_GEOS/lib --with-proj-dir=$BUILD_DIR/$VENDORED_PROJ --with-proj-lib=$BUILD_DIR/$VENDORED_PROJ/lib
+BUNDLE_FROZEN: '1'
+BUNDLE_PATH: vendor/bundle
+BUNDLE_BIN: vendor/bundle/bin
+BUNDLE_WITHOUT: development:test
+BUNDLE_DISABLE_SHARED_GEMS: '1'
+" > $BUILD_DIR/.bundle/config
+
+echo "-----> Vendoring geo libraries done"
