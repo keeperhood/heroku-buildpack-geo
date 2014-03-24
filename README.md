@@ -1,65 +1,13 @@
-# heroku-buildpack-gdal
+# heroku-buildpack-geo
 
-I am a Heroku buildpack that installs [GDAL](http://www.gdal.org/) and its
-dependencies ([proj](https://trac.osgeo.org/proj/)).
+I am a Heroku buildpack that installs GDAL, Proj and GEOS
 
 When used by myself, I will install GDAL and proj libraries, headers, and
 binaries. *Note:* it does *not* currently include the Python bindings.
 
-When used with
-[heroku-buildpack-multi](https://github.com/ddollar/heroku-buildpack-multi),
-I enable subsequent buildpacks / steps to link to these libraries.  (You'll
-need to use the `build-env` branch of [@mojodna's
-fork](https://github.com/mojodna/heroku-buildpack-multi/tree/build-env) for the
-build environment (`CPATH`, `LIBRARY_PATH`, etc.) to be set correctly.)
-
-## Using
-
-### Standalone
-
-When creating a new Heroku app:
-
-```bash
-heroku apps:create -b https://github.com/mojodna/heroku-buildpack-gdal.git
-
-git push heroku master
-```
-
-When modifying an existing Heroku app:
-
-```bash
-heroku config:set BUILDPACK_URL=https://github.com/mojodna/heroku-buildpack-gdal.git
-
-git push heroku master
-```
-
-### Composed
-
-When creating a new Heroku app:
-
-```bash
-heroku apps:create -b https://github.com/mojodna/heroku-buildpack-multi.git#build-env
-
-cat << EOF > .buildpacks
-https://github.com/mojodna/heroku-buildpack-gdal.git
-https://github.com/heroku/heroku-buildpack-nodejs.git
-EOF
-
-git push heroku master
-```
-
-When modifying an existing Heroku app:
-
-```bash
-heroku config:set BUILDPACK_URL=https://github.com/mojodna/heroku-buildpack-multi.git#build-env
-
-cat << EOF > .buildpacks
-https://github.com/mojodna/heroku-buildpack-gdal.git
-https://github.com/heroku/heroku-buildpack-nodejs.git
-EOF
-
-git push heroku master
-```
+You'll need to use [this](https://github.com/desaperados/heroku-buildpack-multi/tree/build-env) 
+`build-env` branch of heroku buildpack multi for the build environment (`CPATH`, `LIBRARY_PATH`, 
+etc.) to be set correctly) for subsequent buildpacks (gdal-ruby and rgeo gems) 
 
 ## Building
 
