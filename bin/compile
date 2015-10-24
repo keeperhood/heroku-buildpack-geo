@@ -43,9 +43,9 @@ VENDORED_PROJ="vendor/proj"
 VENDORED_GEOS="vendor/geos"
 
 echo "-----> Vendoring binaries"
-vendor "http://static.t4spatial.com.s3.amazonaws.com/heroku/gdal-1.10.1-1.tar.gz"    "$BUILD_DIR/$VENDORED_GDAL"
-vendor "http://static.t4spatial.com.s3.amazonaws.com/heroku/proj-4.8.0-1.tar.gz"     "$BUILD_DIR/$VENDORED_PROJ"
-vendor "http://static.t4spatial.com.s3.amazonaws.com/heroku/geos-3.4.1.tar.gz"       "$BUILD_DIR/$VENDORED_GEOS"
+vendor "https://www.dropbox.com/s/phqh75zh58zgc6h/gdal-1.11.3.tar.gz"    "$BUILD_DIR/$VENDORED_GDAL"
+vendor "https://www.dropbox.com/s/iaedu0a1k6gqs5e/proj-4.9.1.tar.gz"     "$BUILD_DIR/$VENDORED_PROJ"
+vendor "https://www.dropbox.com/s/u09yyai5du2o6n1/geos-3.5.0.tar.gz"       "$BUILD_DIR/$VENDORED_GEOS"
 
 echo "-----> Configuring build environment"
 
